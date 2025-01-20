@@ -5,7 +5,14 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.LottieConstants
+import com.airbnb.lottie.compose.animateLottieCompositionAsState
+import com.airbnb.lottie.compose.rememberLottieComposition
+import com.example.minutasemanalrecetas.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -14,11 +21,32 @@ fun RecoverPasswordScreen(
 ) {
     var email by remember { mutableStateOf("") }
 
+    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.cocinera))
+
+    val progress by animateLottieCompositionAsState(
+        composition = composition,
+        iterations = LottieConstants.IterateForever,
+    )
+
     Scaffold(
         topBar = {
-            TopAppBar(title = { Text("Recuperar Contraseña") })
+            CenterAlignedTopAppBar(
+                title = {
+                    // Wrap two texts (title and subtitle) in a Column
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            text = "Recupera tu contraseña",
+                            style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                    }
+                },
+
+                )
         }
-    ) { innerPadding ->
+    ){ innerPadding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -27,6 +55,14 @@ fun RecoverPasswordScreen(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            // Animation
+            LottieAnimation(
+                composition = composition,
+                progress = { progress },
+                modifier = Modifier
+                    .size(300.dp)
+                    .padding(bottom = 24.dp)
+            )
             OutlinedTextField(
                 value = email,
                 onValueChange = { email = it },

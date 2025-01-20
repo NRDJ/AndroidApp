@@ -3,11 +3,17 @@ package com.example.minutasemanalrecetas.screens
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.LottieConstants
+import com.airbnb.lottie.compose.animateLottieCompositionAsState
+import com.airbnb.lottie.compose.rememberLottieComposition
+import com.example.minutasemanalrecetas.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -20,9 +26,36 @@ fun RegisterScreen(
     var confirmPassword by remember { mutableStateOf("") }
     var acceptTerms by remember { mutableStateOf(false) }
 
+    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.animacioncocinera))
+
+    val progress by animateLottieCompositionAsState(
+        composition = composition,
+        iterations = LottieConstants.IterateForever,
+    )
     Scaffold(
         topBar = {
-            TopAppBar(title = { Text("Registro") })
+            CenterAlignedTopAppBar(
+                title = {
+                    // Wrap two texts (title and subtitle) in a Column
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            text = "Regístrate en MinutApp",
+                            style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                        // Subtitle (smaller text style, optional styling)
+                        Text(
+                            // add a padding top
+                            text = "Tu asistente personal de cocina",
+                            style = MaterialTheme.typography.titleMedium,
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                    }
+                },
+
+            )
         }
     ) { innerPadding ->
         Column(
@@ -32,6 +65,14 @@ fun RegisterScreen(
                 .padding(16.dp),
             verticalArrangement = Arrangement.Center
         ) {
+            // Animation
+            LottieAnimation(
+                composition = composition,
+                progress = { progress },
+                modifier = Modifier
+                    .size(300.dp)
+                    .padding(bottom = 24.dp)
+            )
             OutlinedTextField(
                 value = nombre,
                 onValueChange = { nombre = it },
